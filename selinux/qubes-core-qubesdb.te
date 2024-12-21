@@ -15,6 +15,7 @@ dev_rw_xen(qubes_qubesdb_daemon_t)
 optional {
 	require {
 		type qubes_var_run_t, var_run_t;
+		class dir { create add_name remove_name search write };
 	}
 	files_pid_file(qubes_var_run_t)
 	type_transition qubes_qubesdb_daemon_t var_run_t:dir qubes_var_run_t "qubes";
@@ -22,6 +23,14 @@ optional {
 	allow qubes_qubesdb_daemon_t var_run_t:dir { add_name search write };
 	allow qubes_qubesdb_daemon_t qubes_var_run_t:dir { create add_name remove_name search write };
 }
+
+optional_policy(`
+	gen_require(`
+		type proc_xen_t;
+		class dir { list_dir_perms };
+	')
+	allow qubes_qubesdb_daemon_t proc_xen_t:dir list_dir_perms;
+')
 
 ipp_qubesdb_talk(xdm_t)
 ipp_qubesdb_talk(xend_t)
