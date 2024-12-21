@@ -53,7 +53,7 @@ static int verify_path(char *path) {
             continue;
         switch (path[i]) {
             case '-':
-                if (i)
+                if (i > 0 && path[i - 1] != '/')
                     break;
                 /* leading dash forbidden */
                 return 0;
